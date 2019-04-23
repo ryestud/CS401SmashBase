@@ -12,39 +12,18 @@
     && $_SESSION['loggedin'] == true) {
         echo 'Welcome: ' .$_SESSION['username'].", is logged in";
         echo "<a href='logout.php'> CLICK TO LOGOUT</a>";
+//        echo $_SESSION['hash'];
     } 
-    else if(!isset($_SESSION['loggedin']) ){
+    else {
         $_SESSION['message'] = "Please log in.";
         $status = $_SESSION['message'];
         echo $status;
+//        echo $_SESSION['hash'];
     }
-
-//uncomment for orig
-//    if(isset($_POST['submit'])){
-//        
-//        $dao = new Dao();
-//        $con = $dao->getConnection();
-//        $username = mysqli_real_escape_string($_POST['username']);
-//        $password = $_POST['password'];
-//        echo $username;
-//        echo $password;
-//        
-////        var_dump($_POST);
-//        
-//        $query = 'select * from users where username="'.$username.'" and password="'.$password.'"';
-//        
-//            $result = mysqli_query($con,$query);    
-//
-//        if(mysqli_num_rows($result)==1){
-//            $_SESSION['username'] = $username;
-//            header('Location: index.php');
-//            echo $username;
-//        }
-//        else{
-//            echo "invalid";
-//        }
-//    }
-//echo htmlspecialchars($result);
+    if (isset($_SESSION["status"])) {
+        echo "<div id='status'>" .  $_SESSION['status'] . "</div>";
+        unset($_SESSION["status"]);
+    }
 ?>
 <html>
 <header>
@@ -52,6 +31,8 @@
 </header>
 
 <head>
+    <script src = "js/tooltip.js"></script>
+    
     <link rel="stylesheet" href="layout.css">
     <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
      <link href="https://fonts.googleapis.com/css?family=IBM+Plex+Sans+Condensed:400,400i" rel="stylesheet">
@@ -89,14 +70,11 @@
         
       unset($_SESSION["status"]);
     }
-    
-    
      ?>
-<!--//    if($_SESSION['loggedin'] == false){-->
-<!--        $invalidlog = $_SESSION['username'];-->
+
         <div id = containerborder>
         <form method='POST' action='handler.php'>
-<!--            <div class='container'>-->
+            
                 <label for='username'><b>Username</b></label>
                 <input type='text' id='username' placeholder='Enter Username' name='username' value="<?php if(isset($_SESSION['username'])) { echo $_SESSION['username']; } ?>" required>
 
@@ -107,17 +85,9 @@
 
                 <button type='submit' name='submit' id='login' value='Login'>Login</button>
 
-<!--            </div>-->
+            
         </form>
         </div>
-    
-<!--//    }-->
-       
-        
-        <?php if(!isset($_SESSION['loggedin']) ){
-        $_SESSION['message'] = "Please log in.";
-        $status = $_SESSION['message'];}?>
-<!--        <p>"status"</p>-->
         
 </body>
 

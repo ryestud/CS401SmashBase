@@ -6,6 +6,10 @@
         echo 'Welcome: ' .$_SESSION['username'].", is logged in";
         echo "<a href='logout.php'> CLICK TO LOGOUT</a>";
     } 
+else{
+    header('Location: index.php');
+    
+}
 //if(isset($_POST['submit'])){
 //    $style=$_POST["style"];
 ////    echo $newvalues = implode(",",$style);
@@ -22,12 +26,6 @@
         <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
         <link href="https://fonts.googleapis.com/css?family=IBM+Plex+Sans+Condensed:400,400i" rel="stylesheet">
     </head>
-   
-
-    
-
-    
-<!--    <div id="logged">: is logged in</div>-->
     <div class="bannerimage">
         <div class="bannertext">
             <h1>Super Smash Base</h1>
@@ -46,7 +44,8 @@
     <body>
         <div class="splashmessage">Battle Match Maker System</div>
         
-    <div>Update Preferences</div>    
+    <div>Update Preferences</div>  
+<!--    <div class="mastertooltip">-->
     <form method = "post" class = matchmaker action = "matchhandler.php">
         <div><p>Battle Style</p></div>
         <div class = preffield><input type="radio" 
@@ -85,7 +84,9 @@
                                       required>3-Stock</div>
         <input type = "submit" name = "submit" value = "Submit">
     </form>
-    
+<!--    </div>-->
+
+
 <?php
     require_once 'Dao.php';
     $dao = new Dao();
@@ -114,14 +115,9 @@
         
 ?>
 
-        
-        
-        
-        
-        
+
     </body>
     <div class="footer">
         <p>Made by Ryley Studer</p>
-    </div>
-    
+    </div>   
 </html>

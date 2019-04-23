@@ -110,6 +110,30 @@ body {
 
 }
 
+/* Add padding to containers */
+.container {
+    padding: 16px,16px,16px,16px;
+    width: 100px;
+    height: 100px;
+    position: center;
+}
+
+#containerborder {
+    
+    position:center; 
+    padding: 20px,20px;
+    width: 40%;
+    background-color:#012F42; 
+    text-align: center;
+    position: absolute;
+    display: inline-block;
+    left: inherit;
+    /*  z-index: 15;*/
+    top: 50%;
+    left: 30%;
+/*  margin: 180px 0 0 -230px;*/
+  
+}
 
 table {
     border: 2px solid black;
@@ -255,30 +279,19 @@ button:hover {
     opacity: 0.8;
 }
 
-
-
-
-
-/* Add padding to containers */
-.container {
-    padding: 16px,16px,16px,16px;
-    width: 100%;
-    position: center;
+.tooltip {
+	display:none;
+	position:absolute;
+	border:1px solid #333;
+	background-color:#161616;
+	border-radius:5px;
+	padding:10px;
+	color:#fff;
+	font-size:12px Arial;
 }
 
-#containerborder {
-    position:center; 
-    padding: 20px,20px;
-    width: 40%;
-    background-color:#012F42; 
-    text-align: center;
-    position: absolute;
-    display: inline-block;
-  left: inherit;
-/*  z-index: 15;*/
-  top: 50%;
-  left: 30%;
-/*  margin: 180px 0 0 -230px;*/
-  
-}
+
+
+
+
 

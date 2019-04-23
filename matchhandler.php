@@ -5,11 +5,11 @@
     $stock = "";
     $con = "";
     $dao = new Dao();
-
-    if(isset($_POST['style']) || isset($_POST['stock'])){
+//$_POST['loggedin']==true && 
+    if((isset($_POST['style']) || isset($_POST['stock']))){
         
-        $style = $_POST['style'];
-        $stock = $_POST['stock'];
+        $style = htmlspecialchars($_POST['style']);
+        $stock = htmlspecialchars($_POST['stock']);
         
         $dao->updateDB($style,$stock);
   

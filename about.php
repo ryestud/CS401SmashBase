@@ -9,7 +9,10 @@ if (isset($_SESSION['loggedin'])
         $username=$_SESSION['username'];
         echo 'Welcome: ' .$_SESSION['username'].", is logged in";
         echo "<a href='logout.php'> CLICK TO LOGOUT</a>";
-    } 
+    }
+else{
+    header('Location: index.php');
+}
 
 ?>
 <html>

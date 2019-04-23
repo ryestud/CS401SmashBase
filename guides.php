@@ -1,36 +1,14 @@
 <?php 
-    session_start();
+ini_set("allow_url_fopen", 1);
+session_start();
 if (isset($_SESSION['loggedin']) 
-    && $_SESSION['loggedin'] == true) 
-    {
+    && $_SESSION['loggedin'] == true) {
         echo 'Welcome: ' .$_SESSION['username'].", is logged in";
         echo "<a href='logout.php'> CLICK TO LOGOUT</a>";
-    } 
-
-if(!empty($_GET['character'])){
-    $character_url = 'http://beta-api-kuroganehammer.azurewebsites.net/api/characters/name/' . urlencode($_GET['character']);
-    
-    $character_moves = 'http://beta-api-kuroganehammer.azurewebsites.net/api/characters/name/' . urlencode($_GET['character']).'/moves';
-    
-    
-//    var_dump($character_moves);
-    
-    $move_json = json_decode($character_moves,true);
-//    echo '<pre>';
-//        print_r($move_json);
-//    exit;
-//    $move_name = 
-    
-//    $frannsoft_json = file_get_contents($character);
-//    $character_array = json_decode($frannsoft_json, true);
-    
-//    echo $character_url;
-//    echo $character_moves;
-    
+    }
+else{
+    header('Location: index.php');
 }
-
-
-
 
 ?>
 <html>
@@ -39,6 +17,17 @@ if(!empty($_GET['character'])){
         <link rel="stylesheet" href="layout.css">
         <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
         <link href="https://fonts.googleapis.com/css?family=IBM+Plex+Sans+Condensed:400,400i" rel="stylesheet">
+        
+        
+<!--
+        <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+        this1<script type="text/javascript" src="/jquery-ui-1.12.1/jquery-1.7.1.min.js"></script>
+        <script src='/frozen-ridge-38332/js/tooltip.js' type='text/javascript'></script>
+        
+-->
+        
+
+        
     </head>
 
     <div class="bannerimage">
@@ -59,13 +48,219 @@ if(!empty($_GET['character'])){
     
         <div class="splashmessage">Character Guides and Frame Data</div>
         
+        <?php
         
-        <form action = "">
-            <input type = "text" input name ="character" placeholder ="search a character"/>
+        $characterlist = array('MARIO',
+                                'DONKEY KONG', 	
+                                'LINK',
+                                'SAMUS', 
+                                'DARK SAMUS',
+                                'YOSHI',
+                                'KIRBY',
+                                'FOX',
+                                'PIKACHU', 
+                                'LUIGI',
+                                'NESS',
+                                'CAPTAIN FALCON',
+                                'JIGGLYPUFF',
+                                'PEACH',
+                                'DAISY', 
+                                'BOWSER', 
+                                'ICE CLIMBERS',
+                                'SHIEK',
+                                'ZELDA',
+                                'DR. MARIO', 
+                                'PICHU',
+                                'FALCO',
+                                'MARTH',
+                                'LUCINA',
+                                'YOUNG LINK', 
+                                'GANONDORF',
+                                'MEWTWO',
+                                'ROY',
+                                'CHROM', 
+                                'MR. GAME & WATCH',
+                                'META KNIGHT',
+                                'PIT',
+                                'DARK PIT',
+                                'ZERO SUIT SAMUS',
+                                'WARIO',
+                                'SNAKE',
+                                'IKE',
+                                'POKEMON TRAINER',
+                                'DIDDY KONG',
+                                'LUCAS',
+                                'SONIC',
+                                'KING DEDEDE',
+                                'OLIMAR',
+                                'LUCARIO',
+                                'R.O.B.',
+                                'TOON LINK', 
+                                'WOLF',
+                                'VILLAGER', 
+                                'MEGA MAN',
+                                'WII FIT TRAINER',
+                                'ROSALINA & LUMA',
+                                'LITTLE MAC',
+                                'GRENINJA',
+                                'MII FIGHTER', 
+                                'PALUTENA',
+                                'PAC-MAN',
+                                'ROBIN',
+                                'SHULK',
+                                'BOWSER JR.',
+                                'DUCK HUNT',
+                                'RYU',
+                                'KEN',
+                                'CLOUD', 
+                                'CORRIN', 
+                                'BAYONETTA',
+                                'INKLING',
+                                'RIDLEY',
+                                'SIMON',
+                                'RICHTER', 
+                                'KING K. ROOL',
+                                'ISABELLE',
+                                'INCINEROAR', 
+                                'PIRANHA PLANT', 
+                                'JOKER',
+                                '');
+        
+if(in_array(strtoupper($_SESSION['character']),$characterlist)){
+    $character_url = 'http://beta-api-kuroganehammer.azurewebsites.net/api/characters/name/' . urlencode($_SESSION['character']);
+    
+    $character_moves = 'http://beta-api-kuroganehammer.azurewebsites.net/api/characters/name/' . urlencode($_SESSION['character']).'/moves';
+    
+    $json = file_get_contents($character_moves);    
+    $i=0;
+    $move_set=array();
+    $frame_set=array();
+    $currentmove='';
+    $currentmove_frame='';
+    $supername="";
+    
+    $move_json = json_decode($json);
+    $characterName = $move_json[0]->Owner;
+    foreach($move_json as $data){
+        //find the special moves
+        if($move_json[$i]->MoveType == "special"){
+       
+            //find the first move name of each move
+            $currentmove = explode(' ',trim($move_json[$i]->Name))[0]." ".explode(' ',trim($move_json[$i]->Name))[1];
+
+            $currentmove_frame = explode(' ',trim($move_json[$i]->FirstActionableFrame))[0];
+
+            //if the current move name is equal to the next move name
+            if(explode(' ',trim($move_json[$i]->Name))[0] = $supername){
+                $supername = explode(' ',trim($move_json[$i]->Name))[0];
+                $i++;
+                array_push($frame_set,$currentmove_frame);
+                continue;
+            }
+            else{
+                array_push($move_set,preg_replace("/[^[:alnum:][:space:]]/u", '', $currentmove));
+                array_push($frame_set,$currentmove_frame);
+            }
+
+                    
+        }
+        $i++;
+    }
+
+    $n=0;
+
+    $output=array();
+    $output_frame=array();
+    $next_move="";
+
+    $special="";
+    $sidespecial="";
+    $upspecial="";
+    $downspecial="";
+
+    $special_frame="-";
+    $sidespecial_frame="-";
+    $upspecial_frame="-";
+    $downspecial_frame="-";
+
+    $special = $move_set[0];
+    $special_frame = $frame_set[0];
+
+    foreach($move_set as $move){
+        $next_move = explode(' ',trim(next($move_set)))[0];
+        if(explode(' ',trim($move))[0] == $next_move){
+            $frame = $frame_set[$n];
+            $n++;
+            continue;
+        }
+        else{   
+            if(!in_array(explode(' ',trim($move))[0],$output)){
+                array_push($output, $move);  
+                array_push($output_frame,$frame);
+
+            }         
+        }                    
+        $n++;
+    }
+        
+//        $special = $output[0];
+//        $special_frame = $output_frame[0];
+        $sidespecial = $output[1];
+        $sidespecial_frame = $output_frame[1];
+        $upspecial = $output[2];
+        $upspecial_frame = $output_frame[2];
+        $downspecial = $output[3];
+        $downspecial_frame = $output_frame[3];
+
+        
+//        echo $special;
+//        echo $special_frame;
+//        echo $sidespecial;
+//        echo $sidespecial_frame;
+//        echo $upspecial;
+//        echo $upspecial_frame;
+//        echo $downspecial;
+//        echo $downspecial_frame;
+        
+   
+//        
+//        echo $special."<br>";
+//        echo $special_frame."<br>";
+//        
+//        echo $sidespecial."<br>";
+//        echo $sidespecial_frame."<br>";
+//        
+//        echo $upspecial."<br>";
+//        echo $upspecial_frame."<br>";
+//        
+//        echo $downspecial."<br>";
+//        echo $downspecial_frame."<br>";
+//        
+            }
+        else{
+            $_SESSION['character'] = "";
+            echo "<script>
+                    alert('This character does not exist, try again');
+                    
+                </script>";
+        }
+        ?>
+        
+        
+<!--        class = "masterTooltip" title="Choose character"-->
+        
+        
+        <form action = "api_handler.php" method="post">
+            <input type = "text" title="Enter a valid fighter" input name ="character" rel = 'tooltip' value="<?php if(isset($_SESSION['character'])) { echo $_SESSION['character']; } ?>" placeholder ="search a character" />
             <button type ="submit">Search</button>
         </form>
         
         
+               
+       
+                   <?php
+        if(isset($_SESSION['character'])|| $_SESSION['character'] == ""){
+        ?>
         <table class = "center">
           <th>Fighter</th>
           <th>Special Move Controls</th>
@@ -73,40 +268,56 @@ if(!empty($_GET['character'])){
           <th>Special Move Name</th>
           <th>Frames</th>
           <tr>
-<!--            <td  class = "fightercol">Fox<img class = "fighterimg" src="https://avatarfiles.alphacoders.com/163/163189.png"/></td>-->
-        
-              <td class = "fightercol">Fox<img class = "fighterimg" src="https://assets.vg247.com/current//2018/06/NintendoSwitch_SuperSmashBrosUltimate_CharacterArt_07.png"/></td>
+
               
+               <?php 
+                $characterurl = 'http://kuroganehammer.com/images/ultimate/character/'.$characterName.'.png'; 
+              ?>
               
+              <?php echo "<td class = 'fightercol'>".$characterName."<img class = 'fighterimg' src='". $characterurl. "'/></td>";?>
+              
+     
             <td class = buttonpos><img class = "buttonimg" src = "https://www.ssbwiki.com/images/9/9f/ButtonIcon-GCN-B.png"/></td>
             <td>Neutral Special</td>
-            <td>Blaster</td>
-            <td>3 frames</td>
+            <td><?php echo $special ?></td>
+            <td><?php echo $special_frame." frames"?></td>
           </tr>
           <tr>
             <td class = "fightercol"></td>
             <td class = "buttonpos"><img class = "buttonimg" src = "https://www.ssbwiki.com/images/9/9f/ButtonIcon-GCN-B.png"/><img class = "buttonimg" src = "https://www.ssbwiki.com/images/6/65/ButtonIcon-GCN-Control_Stick-R.png"/></td>
             <td>Side Special</td>
-            <td>Fox Illusion</td>
-            <td>7 frames</td>
+            <td><?php echo $sidespecial ?></td>
+            <td><?php echo $sidespecial_frame." frames"?></td>
           </tr>
           <tr>
             <td class = "fightercol"></td>
             <td class = "buttonpos"><img class = "buttonimg" src = "https://www.ssbwiki.com/images/9/9f/ButtonIcon-GCN-B.png"/><img class = "buttonimg" src = "https://www.ssbwiki.com/images/e/e0/ButtonIcon-GCN-Control_Stick-U.png"/></td>
             <td>Up Special</td>
-            <td>Fire Fox</td>
-            <td>27 frames</td>
+            <td><?php echo $upspecial ?></td>
+            <td><?php echo $upspecial_frame." frames"?></td>
           </tr>
           <tr>
             <td class = "lastcol"></td>
             <td class = "buttonpos"><img class = "buttonimg" src = "https://www.ssbwiki.com/images/9/9f/ButtonIcon-GCN-B.png"/><img class = "buttonimg" src = "https://www.ssbwiki.com/images/0/0a/ButtonIcon-GCN-Control_Stick-D.png"/></td>
             <td>Down Special</td>
-            <td>Reflector</td>
-            <td>13 frames</td>
+            <td><?php echo $downspecial ?></td>
+            <td><?php echo $downspecial_frame." frames"?></td>
           </tr>
-
         </table>
-
+        <?php } 
+        else{ 
+            echo "<a>Search a character</a>";
+        }?>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>  
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+<script type="text/javascript"></script>
+<script type="text/javascript">
+  $(function($){
+    $('body').tooltip({
+      selector: '[rel=tooltip]'
+    });
+  });
+</script>  
 
     </body>
     
